@@ -11,24 +11,18 @@ class WeatherForecast:
 
 
 class WeatherForecastHolder:
-    def __init__(self):
-        self._values = []
+    def __init__(self, repository):
+        self.repository = repository
 
     def add(self, date, temperature_c):
         weather_forecast = WeatherForecast(date, temperature_c)
-        self._values.append(weather_forecast)
+        self.repository.add(weather_forecast)
 
     def get(self, date_from, date_to):
-        return [wf for wf in self._values if date_from <= wf.date <= date_to]
+        return self.repository.get(date_from, date_to)
 
     def update(self, date, temperature_c):
-        for item in self._values:
-            if item.date == date:
-                item.temperature_c = temperature_c
-                return True
-        return False
+        return self.repository.update(date, temperature_c)
 
     def delete(self, date):
-        original_count = len(self._values)
-        self._values = [wf for wf in self._values if wf.date != date]
-        return original_count != len(self._values)
+        return self.repository.delete(date)

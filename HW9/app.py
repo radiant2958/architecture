@@ -2,9 +2,11 @@ from datetime import datetime
 from flask import Flask, request, jsonify
 
 from model import WeatherForecastHolder
+from sql_weather_forecast_repository import SqlWeatherForecastRepository
 
 app = Flask(__name__)
-weather_forecast_holder = WeatherForecastHolder()
+repository = SqlWeatherForecastRepository("path_to_your_sqlite.db")
+weather_forecast_holder = WeatherForecastHolder(repository)
 
 @app.route('/')
 def home():
