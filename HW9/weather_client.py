@@ -3,23 +3,29 @@ import requests
 BASE_URL = "http://127.0.0.1:5000/api"  
 
 def add_forecast(date, temperature_c):
-    response = requests.post(f"{BASE_URL}/add", params={'date': date, 'temperatureC': temperature_c})
+    response = requests.post(f"{BASE_URL}/add", json={'date': date, 'temperatureC': temperature_c})
     return response.text
 
 def update_forecast(date, temperature_c):
-    response = requests.put(f"{BASE_URL}/update", params={'date': date, 'temperatureC': temperature_c})
+    response = requests.put(f"{BASE_URL}/update", json={'date': date, 'temperatureC': temperature_c})
     if response.status_code == 200:
         return response.json()
     else:
-        return response.text  
+        return response.text
+
 
 def get_all_forecasts(date_from, date_to):
     response = requests.get(f"{BASE_URL}/get-all", params={'dateFrom': date_from, 'dateTo': date_to})
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return [] 
+    
+    
+def delete_forecast(date):
+    response = requests.delete(f"{BASE_URL}/delete", json={'date': date})
     return response.json()
 
-def delete_forecast(date):
-    response = requests.delete(f"{BASE_URL}/delete", params={'date': date})
-    return response.json()
 
 def main():
     while True:

@@ -14,15 +14,17 @@ def home():
 
 @app.route('/api/add', methods=['POST'])
 def add():
-    date = datetime.strptime(request.args.get('date'), '%Y-%m-%d')
-    temperature_c = int(request.args.get('temperatureC'))
+    data = request.json
+    date = datetime.strptime(data['date'], '%Y-%m-%d')
+    temperature_c = int(data['temperatureC'])
     weather_forecast_holder.add(date, temperature_c)
     return 'Added', 200
 
 @app.route('/api/update', methods=['PUT'])
 def update():
-    date = datetime.strptime(request.args.get('date'), '%Y-%m-%d')
-    temperature_c = int(request.args.get('temperatureC'))
+    data = request.json
+    date = datetime.strptime(data['date'], '%Y-%m-%d')
+    temperature_c = int(data['temperatureC'])
     result = weather_forecast_holder.update(date, temperature_c)
     if result:
         return jsonify({'result': 'success'}), 200
@@ -31,14 +33,16 @@ def update():
 
 @app.route('/api/get-all', methods=['GET'])
 def get_all():
-    date_from = datetime.strptime(request.args.get('dateFrom'), '%Y-%m-%d')
-    date_to = datetime.strptime(request.args.get('dateTo'), '%Y-%m-%d')
+    data = request.json
+    date_from = datetime.strptime(data['dateFrom'], '%Y-%m-%d')
+    date_to = datetime.strptime(data['dateTo'], '%Y-%m-%d')
     forecasts = weather_forecast_holder.get(date_from, date_to)
     return jsonify([{'date': wf.date, 'temperatureC': wf.temperature_c, 'temperatureF': wf.temperature_f} for wf in forecasts])
 
 @app.route('/api/delete', methods=['DELETE'])
 def delete():
-    date = datetime.strptime(request.args.get('date'), '%Y-%m-%d')
+    data = request.json
+    date = datetime.strptime(data['date'], '%Y-%m-%d')
     result = weather_forecast_holder.delete(date)
     if result:
         return jsonify({'result': 'success'}), 200
